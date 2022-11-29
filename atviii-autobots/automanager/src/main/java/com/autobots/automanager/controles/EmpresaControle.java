@@ -23,7 +23,7 @@ public class EmpresaControle {
 	private EmpresaServico servico;
 	
 	
-	@GetMapping("/empresas")
+	@GetMapping("/buscar")
 	public ResponseEntity<List<Empresa>> pegarTodos(){
 		List<Empresa> todos = servico.pegarTodasEmpresas();
 		HttpStatus status = HttpStatus.CONFLICT;
@@ -37,7 +37,7 @@ public class EmpresaControle {
 		}
 	}
 
-	@GetMapping("/empresas/{id}")
+	@GetMapping("/buscar/{id}")
 	public ResponseEntity<Empresa> pegarUsuarioEspecifico(@PathVariable Long id){
 		Empresa empresa = servico.pegarPeloId(id);
 		if(empresa == null) {
@@ -47,14 +47,21 @@ public class EmpresaControle {
 		}
 	}
 	
+	
+	
 	/*@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody Empresa atualizador){
+	
+		
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		List<Empresa> usuarios = empresaServico.pegarTodas();
-		atualizador.setId(id);
 		Empresa usuario = selecionador.selecionar(usuarios, id);
+		atualizador.setId(id);
 		if (usuario != null) {
+			empresaServico.update(atualizador);
 			status = HttpStatus.OK;
+		}else {
+			status = HttpStatus.NOT_FOUND;
 		}
 		return new ResponseEntity<>(status);
 	}*/
