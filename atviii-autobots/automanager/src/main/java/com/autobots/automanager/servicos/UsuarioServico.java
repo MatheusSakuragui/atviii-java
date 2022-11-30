@@ -40,7 +40,7 @@ public class UsuarioServico {
 	}
 	
 	public Usuario pegarPeloId(Long id) {
-		Usuario usuario = repositorio.getById(id);
+		Usuario usuario = repositorio.findById(id).orElse(null);
 		return usuario;
 	}
 	

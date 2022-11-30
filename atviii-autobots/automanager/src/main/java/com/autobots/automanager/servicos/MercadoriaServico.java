@@ -25,7 +25,7 @@ public class MercadoriaServico {
 	}
 	
 	public Mercadoria pegarPeloId(Long id) {
-		Mercadoria achar = repositorio.getById(id);
+		Mercadoria achar = repositorio.findById(id).orElse(null);
 		return achar;
 	}
 	
