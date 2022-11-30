@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioVenda;
 
+@Service
 public class VendaServico {
 	@Autowired
 	  private RepositorioVenda repositorio;

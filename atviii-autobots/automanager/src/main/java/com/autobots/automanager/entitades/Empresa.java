@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Data
@@ -33,6 +35,7 @@ public class Empresa {
 	@Column(nullable = false)
 	private Date cadastro;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = {"documentos", "endereco"} )
 	private Set<Usuario> usuarios = new HashSet<>();
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Mercadoria> mercadorias = new HashSet<>();
