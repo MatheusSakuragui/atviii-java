@@ -32,7 +32,6 @@ public class MercadoriaControler {
 	@Autowired 
 	EmpresaServico empresaServico;
 	
-	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
 		servico.salvar(mercadoria);

@@ -7,10 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioVenda;
+import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.VendaServico;
 
 
@@ -20,6 +25,16 @@ public class VendaControler {
 
 	@Autowired
 	private VendaServico vendaServico;
+	
+	@Autowired
+	private EmpresaServico empresaServico;
+	
+	/*@PostMapping("/cadastrar/{id}")
+	public ResponseEntity<?> cadastrar(@RequestBody Venda venda, @PathVariable Long id){
+		Empresa empresaSelecionada = empresaServico.pegarPeloId(id);
+		
+	}*/
+	
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Venda>> pegarTodos(){
