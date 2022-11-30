@@ -17,7 +17,7 @@ public class ServicoServico {
 	}
 	
 	public Servico pegarPeloId(Long id) {
-		Servico achar = repositorio.getById(id);
+		Servico achar = repositorio.findById(id).orElse(null);
 		return achar;
 	}
 	

@@ -22,7 +22,7 @@ public class VendaServico {
 	  }
 
 	  public Venda pegarPeloId(Long id) {
-	    Venda venda = repositorio.getById(id);
+	    Venda venda = repositorio.findById(id).orElse(null);
 	    return venda;
 	  }
 

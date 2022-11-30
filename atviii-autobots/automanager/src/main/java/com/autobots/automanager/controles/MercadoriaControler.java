@@ -34,7 +34,6 @@ public class MercadoriaControler {
 	
 	
 	@PostMapping("/cadastrar/{id}")
-	
 	public ResponseEntity<?> cadastrar(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
 		servico.salvar(mercadoria);
 		Usuario usuario = usuarioServico.pegarPeloId(id);

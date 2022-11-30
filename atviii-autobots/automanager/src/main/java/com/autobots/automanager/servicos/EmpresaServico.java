@@ -14,13 +14,17 @@ public class EmpresaServico {
 	@Autowired
 	private RepositorioEmpresa repositorio;
 	
+	public void salvar(Empresa cadastrar) {
+		repositorio.save(cadastrar);
+	}
+	
 	public List<Empresa> pegarTodasEmpresas(){
 		List<Empresa> empresas = repositorio.findAll();
 		return empresas;
 	}
 	
 	public Empresa pegarPeloId(Long id) {
-		Empresa empresa = repositorio.getById(id);
+		Empresa empresa = repositorio.findById(id).orElse(null);
 		return empresa;
 	}
 	

@@ -1,5 +1,6 @@
 package com.autobots.automanager.controles;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,13 @@ public class EmpresaControle {
 	
 	@Autowired
 	private EmpresaServico servico;
-	
+
+	@PostMapping("/cadastrar")
+	public ResponseEntity<?> cadastrarEmpresa(@RequestBody Empresa empresa){
+		empresa.setCadastro(new Date());
+		servico.salvar(empresa);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Empresa>> pegarTodos(){

@@ -11,23 +11,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Servico;
 import com.autobots.automanager.repositorios.RepositorioServico;
+import com.autobots.automanager.servicos.ServicoServico;
 
 @RestController
 @RequestMapping("/servico")
 public class ServicoControler {
 
 	@Autowired
-	private RepositorioServico repositorio;
+	private ServicoServico servicoServico;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Servico>> pegarTodos(){
-		List<Servico> servicos = repositorio.findAll();
+		List<Servico> servicos = servicoServico.pegarTodosServicos();
 		return new ResponseEntity<List<Servico>>(servicos, HttpStatus.FOUND);
 	}
 	
 	@GetMapping("/buscar/{id}")
 	public ResponseEntity<Servico> pegarUm(@PathVariable Long id){
-		Servico servico = repositorio.findById(id).orElse(null);
+		Servico servico = servicoServico.pegarPeloId(id);
 		HttpStatus status = HttpStatus.CONFLICT;
 		if(servico == null) {
 			status = HttpStatus.NOT_FOUND;	

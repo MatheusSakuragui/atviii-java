@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioVenda;
+import com.autobots.automanager.servicos.VendaServico;
 
 
 @RestController
@@ -18,17 +19,17 @@ import com.autobots.automanager.repositorios.RepositorioVenda;
 public class VendaControler {
 
 	@Autowired
-	private RepositorioVenda repositorio;
+	private VendaServico vendaServico;
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Venda>> pegarTodos(){
-		List<Venda> venda = repositorio.findAll();
+		List<Venda> venda = vendaServico.pegarTodasVendas();
 		return new ResponseEntity<List<Venda>>(venda, HttpStatus.FOUND);
 	}
 	
 	@GetMapping("/buscar/{id}")
 	public ResponseEntity<Venda> pegarUm(@PathVariable Long id){
-		Venda venda = repositorio.findById(id).orElse(null);
+		Venda venda = vendaServico.pegarPeloId(id);
 		HttpStatus status = HttpStatus.CONFLICT;
 		if(venda == null) {
 			status = HttpStatus.NOT_FOUND;	
