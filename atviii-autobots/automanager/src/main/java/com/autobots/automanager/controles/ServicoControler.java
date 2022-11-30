@@ -29,6 +29,17 @@ public class ServicoControler {
 	@Autowired
 	private EmpresaServico servicoEmpresa;
 	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizar(@RequestBody Servico servico ,@PathVariable Long id){
+		Servico serv = servicoServico.pegarPeloId(id);
+		if(serv == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		servico.setId(id);
+		servicoServico.update(servico);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Servico servico, @PathVariable Long id ){
 	Empresa empresa = servicoEmpresa.pegarPeloId(id);
