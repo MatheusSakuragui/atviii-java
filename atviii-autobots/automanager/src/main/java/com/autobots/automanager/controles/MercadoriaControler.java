@@ -43,6 +43,7 @@ public class MercadoriaControler {
 			for (Usuario usuarios : usuarioServico.pegarTodosUsuarios()) {
 				if(usuarios.getId().equals(usuario.getId())) {
 					empresa.getMercadorias().add(mercadoria);
+					empresaServico.salvar(empresa);
 				}
 			}
 		}

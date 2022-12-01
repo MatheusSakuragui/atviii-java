@@ -22,18 +22,18 @@ import com.autobots.automanager.servicos.EmpresaServico;
 public class EmpresaControle {
 	
 	@Autowired
-	private EmpresaServico servico;
+	private EmpresaServico servicoEmpresa;
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<?> cadastrarEmpresa(@RequestBody Empresa empresa){
 		empresa.setCadastro(new Date());
-		servico.salvar(empresa);
+		servicoEmpresa.salvar(empresa);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Empresa>> pegarTodos(){
-		List<Empresa> todos = servico.pegarTodasEmpresas();
+		List<Empresa> todos = servicoEmpresa.pegarTodasEmpresas();
 		HttpStatus status = HttpStatus.CONFLICT;
 		if(todos.isEmpty()) {
 			status = HttpStatus.NOT_FOUND;
@@ -47,7 +47,7 @@ public class EmpresaControle {
 
 	@GetMapping("/buscar/{id}")
 	public ResponseEntity<Empresa> pegarUsuarioEspecifico(@PathVariable Long id){
-		Empresa empresa = servico.pegarPeloId(id);
+		Empresa empresa = servicoEmpresa.pegarPeloId(id);
 		if(empresa == null) {
 			return new ResponseEntity<Empresa>(HttpStatus.NOT_FOUND);
 		}else {
@@ -56,20 +56,16 @@ public class EmpresaControle {
 	}
 	
 	
-	/*@PutMapping("/atualizar/{id}")
-	public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody Empresa atualizador){
-	
-		
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		List<Empresa> usuarios = empresaServico.pegarTodas();
-		Empresa usuario = selecionador.selecionar(usuarios, id);
-		atualizador.setId(id);
-		if (usuario != null) {
-			empresaServico.update(atualizador);
-			status = HttpStatus.OK;
-		}else {
-			status = HttpStatus.NOT_FOUND;
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizarEmpresa(@PathVariable Long id, @RequestBody Empresa empresa){
+		Empresa emp = servicoEmpresa.pegarPeloId(id);
+		if(emp == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(status);
-	}*/
+		empresa.setId(id);
+		servicoEmpresa.atualizarEmpresa(emp);
+		servicoEmpresa.salvar(empresa);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		
+	}
 }
