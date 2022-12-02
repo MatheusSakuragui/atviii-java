@@ -108,8 +108,9 @@ public class UsuarioServico {
 		return achar;
 	}
 	
-	public void salvarDocumento(Documento documento) {
-		repositorioDocumento.save(documento);
+	public Long salvarDocumento(Documento documento) {
+		return repositorioDocumento.save(documento).getId();
+		
 	}
 	
 	

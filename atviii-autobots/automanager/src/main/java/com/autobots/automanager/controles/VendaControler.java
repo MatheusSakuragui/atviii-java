@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
+import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioVenda;
 import com.autobots.automanager.servicos.EmpresaServico;
+import com.autobots.automanager.servicos.UsuarioServico;
+import com.autobots.automanager.servicos.VeiculoServico;
 import com.autobots.automanager.servicos.VendaServico;
 
 
@@ -29,11 +32,20 @@ public class VendaControler {
 	@Autowired
 	private EmpresaServico empresaServico;
 	
-	/*@PostMapping("/cadastrar/{id}")
+	@Autowired
+	private UsuarioServico usuarioServico;
+	
+	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Venda venda, @PathVariable Long id){
 		Empresa empresaSelecionada = empresaServico.pegarPeloId(id);
-		
-	}*/
+		if(empresaSelecionada == null) {
+			 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		Usuario funcionarioSelecionado = usuarioServico.pegarPeloId(venda.getFuncionario().getId());
+		funcionarioSelecionado.getVendas().add(venda);
+		empresaSelecionada.getVendas().add(venda);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 	
 	
 	@GetMapping("/buscar")
@@ -52,8 +64,7 @@ public class VendaControler {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Venda>(venda, status);
-		
-		
+				
 	}
 	
 	
