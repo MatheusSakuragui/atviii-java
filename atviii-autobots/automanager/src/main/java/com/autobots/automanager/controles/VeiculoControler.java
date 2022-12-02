@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,8 +60,17 @@ public class VeiculoControler {
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Veiculo>(veiculo, status);
-		
-		
+	}
+	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizarVeiculo (@RequestBody Veiculo veiculo, @PathVariable Long id){
+		Veiculo vec = veiculosServico.pegarPeloId(id);
+		if (vec == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		veiculo.setId(id);
+		veiculosServico.atualizarVeiculo(veiculo);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 
