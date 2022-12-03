@@ -20,6 +20,7 @@ import com.autobots.automanager.entitades.Email;
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Telefone;
 import com.autobots.automanager.entitades.Usuario;
+import com.autobots.automanager.link.UsuarioLink;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.UsuarioServico;
 
@@ -32,6 +33,10 @@ public class UsuarioControler {
 	
 	@Autowired
 	private EmpresaServico empresaServico;
+	
+	@Autowired
+	
+	private UsuarioLink usuarioLink;
 	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Usuario usuario, @PathVariable Long id){
@@ -59,6 +64,7 @@ public class UsuarioControler {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Usuario>> pegarTodos(){
 		List<Usuario> usuario = usuarioServico.pegarTodosUsuarios();
+		usuarioLink.adicionarLink(usuario);
 		return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.FOUND);
 	}
 	
@@ -69,6 +75,7 @@ public class UsuarioControler {
 		if(usuario == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			usuarioLink.adicionarLink(usuario);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Usuario>(usuario, status);
