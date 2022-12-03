@@ -148,7 +148,7 @@ public class UsuarioControler {
 		
 		usuarioServico.deletarUsuario(usuarioSelecionado);
 		
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(HttpStatus.OK);
 			
 		}
 

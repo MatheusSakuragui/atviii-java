@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Veiculo;
+import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.servicos.UsuarioServico;
 import com.autobots.automanager.servicos.VeiculoServico;
+import com.autobots.automanager.servicos.VendaServico;
 
 @RestController
 @RequestMapping("/veiculo")
@@ -24,6 +27,9 @@ public class VeiculoControler {
 	
 	@Autowired
 	private VeiculoServico veiculosServico;
+	
+	@Autowired
+	private VendaServico vendaServico;
 	
 	@Autowired
 	private UsuarioServico usuarioServico;
@@ -71,5 +77,36 @@ public class VeiculoControler {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
-
+	@DeleteMapping("/deletar/{id}")
+	public ResponseEntity<?> deletar(@PathVariable Long id){
+		Veiculo veiculoSelecionado = veiculosServico.pegarPeloId(id);
+		if(veiculoSelecionado == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		List<Usuario> usuarios = usuarioServico.pegarTodosUsuarios();
+		List<Venda> vendas = vendaServico.pegarTodasVendas();
+		
+		for(Usuario usuario : usuarios) {
+			for(Veiculo veiculo: usuario.getVeiculos()) {
+				if(veiculo.getId() == id) {
+					usuario.getVeiculos().remove(veiculo);
+					usuarioServico.cadastrarUsuario(usuario);
+				}
+			}
+		}
+		
+		for(Venda venda : vendas) {
+				if(venda.getVeiculo().getId() == id) {
+					venda.setVeiculo(null);
+					vendaServico.cadastrarVenda(venda);
+				}
+			}
+		
+		veiculosServico.deletar(veiculoSelecionado);
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+		}
+		
+	
 }
+

@@ -32,6 +32,10 @@ public class VeiculoServico {
 		return repositorio.save(newObj);
 	}
 	
+	public void deletar(Veiculo veiculo) {
+		repositorio.delete(veiculo);
+	}
+	
 	private void atualizar(Veiculo newObj, Veiculo obj) {
 		newObj.setModelo(obj.getModelo());
 		newObj.setPlaca(obj.getPlaca());

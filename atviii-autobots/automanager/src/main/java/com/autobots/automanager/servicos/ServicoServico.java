@@ -23,6 +23,10 @@ public class ServicoServico {
 		return achar;
 	}
 	
+	public void deletar(Servico servico) {
+		repositorio.delete(servico);
+	}
+	
 	public Servico update(Servico obj) {
 		Servico newObj = pegarPeloId(obj.getId());
 		updateData(newObj, obj);

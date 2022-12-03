@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Servico;
+import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioServico;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.ServicoServico;
+import com.autobots.automanager.servicos.VendaServico;
 
 @RestController
 @RequestMapping("/servico")
@@ -28,6 +31,9 @@ public class ServicoControler {
 	
 	@Autowired
 	private EmpresaServico servicoEmpresa;
+	
+	@Autowired
+	private VendaServico servicoVenda;
 	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizar(@RequestBody Servico servico ,@PathVariable Long id){
@@ -68,4 +74,37 @@ public class ServicoControler {
 		}
 		return new ResponseEntity<Servico>(servico, status);
 	}	
+	
+	@DeleteMapping("/deletar/{id}")
+	public ResponseEntity<?> deletar(@PathVariable Long id){
+		Servico servicoSelecionado = servicoServico.pegarPeloId(id);
+		
+		if(servicoSelecionado == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		List<Empresa> empresas = servicoEmpresa.pegarTodasEmpresas();
+	    List<Venda> vendas = servicoVenda.pegarTodasVendas();
+	    
+	    for (Empresa empresa : empresas) {
+	        for (Servico servico : empresa.getServicos()) {
+	          if (servico.getId().equals(id)) {
+	        	  empresa.getServicos().remove(servico);
+	          }
+	        }
+	      }
+	    
+	      for (Venda venda : vendas) {
+	        for (Servico servico : venda.getServicos()) {
+	          if (servico.getId().equals(id)) {
+	        	  venda.getServicos().remove(servico);
+	          }
+	        }
+	      }
+	
+	    servicoServico.deletar(servicoSelecionado);
+		return new ResponseEntity<>(HttpStatus.OK);
+	    
+	}
+	
 }

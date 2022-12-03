@@ -18,6 +18,10 @@ public class EmpresaServico {
 		repositorio.save(cadastrar);
 	}
 	
+	public void deletar(Empresa empresa) {
+		repositorio.delete(empresa);
+	}
+	
 	public List<Empresa> pegarTodasEmpresas(){
 		List<Empresa> empresas = repositorio.findAll();
 		return empresas;

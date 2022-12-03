@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Mercadoria;
 import com.autobots.automanager.entitades.Usuario;
+import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.repositorios.RepositorioMercadoria;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.MercadoriaServico;
 import com.autobots.automanager.servicos.UsuarioServico;
+import com.autobots.automanager.servicos.VendaServico;
 
 @RestController
 @RequestMapping("/mercadoria")
@@ -31,6 +33,9 @@ public class MercadoriaControler {
 	
 	@Autowired
 	private UsuarioServico usuarioServico;
+	
+	@Autowired
+	private VendaServico vendaServico;
 	
 	@Autowired 
 	EmpresaServico empresaServico;
@@ -60,7 +65,6 @@ public class MercadoriaControler {
 		usuarioServico.cadastrarUsuario(usuario);
 		return new ResponseEntity<> (HttpStatus.CREATED);
 	}
-	
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Mercadoria>> pegarTodos(){
@@ -93,6 +97,50 @@ public class MercadoriaControler {
 		mercadoria.setId(id);
 		servico.update(mercadoria);
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
+	@DeleteMapping("/deletar/{id}")
+	public ResponseEntity<?> atualizarMercadoria(@PathVariable Long id){
+		Mercadoria mercadoriaSelecionada = servico.pegarPeloId(id);
+	
+	    if(mercadoriaSelecionada == null) {
+	    	return new ResponseEntity<>(HttpStatus.FOUND);
+	    }
+	    
+	    List<Usuario> usuarios = usuarioServico.pegarTodosUsuarios();
+	    List<Empresa> empresas = empresaServico.pegarTodasEmpresas();
+	    List<Venda> vendas = vendaServico.pegarTodasVendas();
+	    
+	    for(Usuario usuario : usuarios) {
+	    	for(Mercadoria mercadoria : usuario.getMercadorias()) {
+	    		if(mercadoria.getId() == id) {
+	    			usuario.getMercadorias().remove(mercadoria);
+	    			usuarioServico.cadastrarUsuario(usuario);
+	    		}
+	    	}
+	    }
+	    
+	    for(Empresa empresa : empresas) {
+	    	for(Mercadoria mercadoria : empresa.getMercadorias()) {
+	    		if(mercadoria.getId() == id) {
+	    			empresa.getMercadorias().remove(mercadoria);
+	    			empresaServico.salvar(empresa);
+	    		}
+	    	}
+	    }
+	    
+	    for(Venda venda : vendas) {
+	    	for(Mercadoria mercadoria : venda.getMercadorias()) {
+	    		if(mercadoria.getId() == id) {
+	    			venda.getMercadorias().remove(mercadoria);
+	    			vendaServico.cadastrarVenda(venda);
+	    		}
+	    	}
+	    }
+
+	    servico.deletar(mercadoriaSelecionada);
+	    return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 	
 }

@@ -35,8 +35,8 @@ public class MercadoriaServico {
 		return repositorio.save(newObj);
 	}
 	
-	public void delete(Long obj) {
-		repositorio.deleteById(obj);
+	public void deletar(Mercadoria mercadoria) {
+		repositorio.delete(mercadoria);
 	}
 	
 	private void updateData(Mercadoria newObj, Mercadoria obj) {
