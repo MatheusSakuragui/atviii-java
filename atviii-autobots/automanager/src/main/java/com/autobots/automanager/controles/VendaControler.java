@@ -17,6 +17,7 @@ import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Veiculo;
 import com.autobots.automanager.entitades.Venda;
+import com.autobots.automanager.link.VendaLink;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.UsuarioServico;
 import com.autobots.automanager.servicos.VeiculoServico;
@@ -25,6 +26,7 @@ import com.autobots.automanager.servicos.VendaServico;
 
 @RestController
 @RequestMapping("/venda")
+
 public class VendaControler {
 
 	@Autowired
@@ -38,6 +40,9 @@ public class VendaControler {
 	
 	@Autowired
 	private UsuarioServico usuarioServico;
+	
+	@Autowired
+	private VendaLink linkVenda;
 	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Venda venda, @PathVariable Long id){
@@ -63,6 +68,7 @@ public class VendaControler {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Venda>> pegarTodos(){
 		List<Venda> venda = vendaServico.pegarTodasVendas();
+		linkVenda.adicionarLink(venda);
 		return new ResponseEntity<List<Venda>>(venda, HttpStatus.FOUND);
 	}
 	
@@ -73,6 +79,7 @@ public class VendaControler {
 		if(venda == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			linkVenda.adicionarLink(venda);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Venda>(venda, status);

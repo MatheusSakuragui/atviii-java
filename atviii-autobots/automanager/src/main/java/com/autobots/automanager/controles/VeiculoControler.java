@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Veiculo;
+import com.autobots.automanager.link.VeiculoLink;
 import com.autobots.automanager.servicos.UsuarioServico;
 import com.autobots.automanager.servicos.VeiculoServico;
 
@@ -27,6 +28,9 @@ public class VeiculoControler {
 	
 	@Autowired
 	private UsuarioServico usuarioServico;
+	
+	@Autowired
+	private VeiculoLink veiculoLink;
 	
 	@PostMapping("cadastrar/{id}")
 	public ResponseEntity<?> cadastrar (@RequestBody Veiculo veiculo, @PathVariable Long id){
@@ -45,6 +49,7 @@ public class VeiculoControler {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Veiculo>> pegarTodos(){
 		List<Veiculo> veiculo = veiculosServico.pegarTodosVeiculos();
+		veiculoLink.adicionarLink(veiculo);
 		return new ResponseEntity<List<Veiculo>>(veiculo, HttpStatus.FOUND);
 	}
 	
@@ -55,6 +60,7 @@ public class VeiculoControler {
 		if(veiculo == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			veiculoLink.adicionarLink(veiculo);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Veiculo>(veiculo, status);

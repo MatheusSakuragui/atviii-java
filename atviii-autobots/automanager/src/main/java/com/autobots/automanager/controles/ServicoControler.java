@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Servico;
+import com.autobots.automanager.link.ServicoLink;
 import com.autobots.automanager.repositorios.RepositorioServico;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.ServicoServico;
@@ -28,6 +29,9 @@ public class ServicoControler {
 	
 	@Autowired
 	private EmpresaServico servicoEmpresa;
+	
+	@Autowired
+	private ServicoLink servicoLink;
 	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizar(@RequestBody Servico servico ,@PathVariable Long id){
@@ -54,6 +58,7 @@ public class ServicoControler {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Servico>> pegarTodos(){
 		List<Servico> servicos = servicoServico.pegarTodosServicos();
+		servicoLink.adicionarLink(servicos);
 		return new ResponseEntity<List<Servico>>(servicos, HttpStatus.FOUND);
 	}
 	
@@ -64,6 +69,7 @@ public class ServicoControler {
 		if(servico == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			servicoLink.adicionarLink(servico);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Servico>(servico, status);

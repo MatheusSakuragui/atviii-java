@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
+import com.autobots.automanager.link.EmpresaLink;
 import com.autobots.automanager.servicos.EmpresaServico;
 
 @RestController
@@ -23,6 +24,9 @@ public class EmpresaControle {
 	
 	@Autowired
 	private EmpresaServico servicoEmpresa;
+	
+	@Autowired
+	private EmpresaLink empresaLink;
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<?> cadastrarEmpresa(@RequestBody Empresa empresa){
@@ -41,6 +45,7 @@ public class EmpresaControle {
 		}else {
 			status = HttpStatus.FOUND;
 			ResponseEntity<List<Empresa>> resposta = new ResponseEntity<List<Empresa>>(todos, status);
+			empresaLink.adicionarLink(todos);
 			return resposta;
 		}
 	}
@@ -51,6 +56,7 @@ public class EmpresaControle {
 		if(empresa == null) {
 			return new ResponseEntity<Empresa>(HttpStatus.NOT_FOUND);
 		}else {
+			empresaLink.adicionarLink(empresa);
 			return new ResponseEntity<Empresa>(empresa, HttpStatus.FOUND);
 		}
 	}
