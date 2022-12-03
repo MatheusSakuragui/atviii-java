@@ -36,20 +36,26 @@ public class MercadoriaControler {
 	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
-		servico.salvar(mercadoria);
+		
+		Long idMercadoria = servico.salvar(mercadoria);
+		Mercadoria mercadoriaNova = servico.pegarPeloId(idMercadoria);
+		
 		Usuario usuario = usuarioServico.pegarPeloId(id);
+		
 		if(usuario == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		
 		for(Empresa empresa : empresaServico.pegarTodasEmpresas()) {
 			for (Usuario usuarios : usuarioServico.pegarTodosUsuarios()) {
 				if(usuarios.getId().equals(usuario.getId())) {
-					empresa.getMercadorias().add(mercadoria);
+					empresa.getMercadorias().add(mercadoriaNova);
 					empresaServico.salvar(empresa);
 				}
 			}
 		}
-		usuario.getMercadorias().add(mercadoria);
+		
+		usuario.getMercadorias().add(mercadoriaNova);
 		usuarioServico.cadastrarUsuario(usuario);
 		return new ResponseEntity<> (HttpStatus.CREATED);
 	}

@@ -15,8 +15,8 @@ public class MercadoriaServico {
 	@Autowired
 	private RepositorioMercadoria repositorio;
 	
-	public void salvar(Mercadoria cadastro) {
-		repositorio.save(cadastro);
+	public Long salvar(Mercadoria cadastro) {
+		return repositorio.save(cadastro).getId();
 	}
 	
 	public List<Mercadoria> pegarTodos(){
