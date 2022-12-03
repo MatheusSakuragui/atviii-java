@@ -48,6 +48,11 @@ public class UsuarioServico {
 		repositorio.save(usuario);
 	}
 	
+	public void deletarUsuario(Usuario usuario) {
+		System.out.println(usuario);
+		repositorio.delete(usuario);
+	}
+	
 	public Usuario atualizarUsuario(Usuario obj) {
 		Usuario newObj = pegarPeloId(obj.getId());
 		updateData(newObj, obj);
