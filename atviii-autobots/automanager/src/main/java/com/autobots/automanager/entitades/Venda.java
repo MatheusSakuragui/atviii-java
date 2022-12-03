@@ -35,7 +35,7 @@ public class Venda {
 	@JsonIgnoreProperties(value = {"documentos", "endereco"} )
 	private Usuario cliente;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-	@JsonIgnoreProperties(value = {"documentos", "endereco"} )
+	@JsonIgnoreProperties(value = {"documentos", "endereco", "vendas"} )
 	private Usuario funcionario;
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	private Set<Mercadoria> mercadorias = new HashSet<>();

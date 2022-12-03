@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Usuario;
+import com.autobots.automanager.entitades.Veiculo;
 import com.autobots.automanager.entitades.Venda;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.UsuarioServico;
+import com.autobots.automanager.servicos.VeiculoServico;
 import com.autobots.automanager.servicos.VendaServico;
 
 
@@ -32,6 +34,9 @@ public class VendaControler {
 	private EmpresaServico empresaServico;
 	
 	@Autowired
+	private VeiculoServico veiculoServico;
+	
+	@Autowired
 	private UsuarioServico usuarioServico;
 	
 	@PostMapping("/cadastrar/{id}")
@@ -41,8 +46,16 @@ public class VendaControler {
 			 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Usuario funcionarioSelecionado = usuarioServico.pegarPeloId(venda.getFuncionario().getId());
-		funcionarioSelecionado.getVendas().add(venda);
+		Usuario clienteSelecionado = usuarioServico.pegarPeloId(venda.getCliente().getId());
+		Veiculo veiculoSelecionado = veiculoServico.pegarPeloId(venda.getVeiculo().getId());
+		venda.setVeiculo(veiculoSelecionado);
+		venda.setCliente(clienteSelecionado);
+		venda.setFuncionario(funcionarioSelecionado);
+		usuarioServico.cadastrarUsuario(funcionarioSelecionado);
+
 		empresaSelecionada.getVendas().add(venda);
+		empresaServico.salvar(empresaSelecionada);
+		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
