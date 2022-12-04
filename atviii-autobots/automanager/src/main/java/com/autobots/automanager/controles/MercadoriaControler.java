@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Mercadoria;
 import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Venda;
-import com.autobots.automanager.repositorios.RepositorioMercadoria;
+import com.autobots.automanager.link.MercadoriaLink;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.MercadoriaServico;
 import com.autobots.automanager.servicos.UsuarioServico;
@@ -39,6 +38,9 @@ public class MercadoriaControler {
 	
 	@Autowired 
 	EmpresaServico empresaServico;
+	
+	@Autowired
+	private MercadoriaLink mercadoriaLink;
 	
 	@PostMapping("/cadastrar/{id}")
 	public ResponseEntity<?> cadastrar(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
@@ -72,6 +74,7 @@ public class MercadoriaControler {
 		if(mercadoria.isEmpty()) {
 			return new ResponseEntity<List<Mercadoria>>(HttpStatus.NOT_FOUND);
 		}
+		mercadoriaLink.adicionarLink(mercadoria);
 		return new ResponseEntity<List<Mercadoria>>(mercadoria, HttpStatus.FOUND);
 	}
 	
@@ -82,6 +85,7 @@ public class MercadoriaControler {
 		if(mercadoria == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			mercadoriaLink.adicionarLink(mercadoria);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Mercadoria>(mercadoria, status);
@@ -96,6 +100,7 @@ public class MercadoriaControler {
 		}
 		mercadoria.setId(id);
 		servico.update(mercadoria);
+		
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	

@@ -14,13 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
 @Data
 @Entity
-public class Empresa {
+public class Empresa extends RepresentationModel<Empresa>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

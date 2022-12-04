@@ -53,4 +53,5 @@ public class Usuario extends RepresentationModel<Usuario> {
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	@JsonIgnoreProperties(value = {"proprietario", "vendas"} )
 	private Set<Veiculo> veiculos = new HashSet<>();
+	
 }

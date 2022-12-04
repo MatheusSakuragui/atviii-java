@@ -20,10 +20,8 @@ public class UsuarioLink implements AdicionadorLink<Usuario> {
 							.pegarUm(cliente.getId()))
 					.withSelfRel();
 			cliente.add(linkUsuario);
-			
 		}
 	}
-	
 	
 	@Override
 	public void adicionarLink( Usuario usuario ) {
@@ -31,9 +29,7 @@ public class UsuarioLink implements AdicionadorLink<Usuario> {
 					.linkTo(WebMvcLinkBuilder
 							.methodOn(UsuarioControler.class)
 							.pegarTodos())
-					.withRel("Todos Clientes");
+					.withRel("Todos Veiculos");
 			usuario.add(linkUsuario);
-			
-
 	}
 }

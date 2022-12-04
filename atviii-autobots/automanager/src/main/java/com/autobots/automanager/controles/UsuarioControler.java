@@ -1,6 +1,6 @@
 package com.autobots.automanager.controles;
 
-import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entitades.CredencialUsuarioSenha;
-import com.autobots.automanager.entitades.Documento;
-import com.autobots.automanager.entitades.Email;
+
 import com.autobots.automanager.entitades.Empresa;
-import com.autobots.automanager.entitades.Telefone;
+
 import com.autobots.automanager.entitades.Usuario;
 import com.autobots.automanager.entitades.Veiculo;
 import com.autobots.automanager.entitades.Venda;

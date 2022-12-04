@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.entitades.Empresa;
 import com.autobots.automanager.entitades.Servico;
 import com.autobots.automanager.entitades.Venda;
-import com.autobots.automanager.repositorios.RepositorioServico;
+import com.autobots.automanager.link.ServicoLink;
 import com.autobots.automanager.servicos.EmpresaServico;
 import com.autobots.automanager.servicos.ServicoServico;
 import com.autobots.automanager.servicos.VendaServico;
@@ -34,6 +33,9 @@ public class ServicoControler {
 	
 	@Autowired
 	private VendaServico servicoVenda;
+	
+	@Autowired
+	private ServicoLink servicoLink;
 	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizar(@RequestBody Servico servico ,@PathVariable Long id){
@@ -60,6 +62,7 @@ public class ServicoControler {
 	@GetMapping("/buscar")
 	public ResponseEntity<List<Servico>> pegarTodos(){
 		List<Servico> servicos = servicoServico.pegarTodosServicos();
+		servicoLink.adicionarLink(servicos);
 		return new ResponseEntity<List<Servico>>(servicos, HttpStatus.FOUND);
 	}
 	
@@ -70,6 +73,7 @@ public class ServicoControler {
 		if(servico == null) {
 			status = HttpStatus.NOT_FOUND;	
 		}else{
+			servicoLink.adicionarLink(servico);
 			status = HttpStatus.FOUND;
 		}
 		return new ResponseEntity<Servico>(servico, status);
